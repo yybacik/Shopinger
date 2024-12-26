@@ -6,9 +6,13 @@ import { isAuth, isAdmin } from '../utils.js';
 const productRouter = express.Router();
 
 productRouter.get('/', async (req, res) => {
-  const products = await Product.find();
-  res.send(products);
-});
+  try{
+    const products = await Product.find();
+    res.send(products);
+  } catch(err) {
+    console.log(err)
+  }
+}); 
 
 productRouter.post(
   '/',
