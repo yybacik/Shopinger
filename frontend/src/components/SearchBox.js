@@ -6,11 +6,20 @@ import { FaSearch } from 'react-icons/fa';
 export default function SearchBox() {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
+  const [isHovered, setIsHovered] = useState(false); // Hover durumu için state
 
   const submitHandler = (e) => {
     e.preventDefault();
     const trimmedQuery = query.trim();
     navigate(trimmedQuery ? `/search/?query=${trimmedQuery}` : '/search');
+  };
+
+  // Buton için dinamik stil
+  const buttonStyle = {
+    backgroundColor: isHovered ? '#f8f9fa' : '#343a40', // Light veya Dark arka plan
+    borderColor: isHovered ? '#f8f9fa' : '#343a40', // Sınır rengi
+    color: isHovered ? '#343a40' : '#fff', // İkon rengi
+    transition: 'background-color 0.3s, border-color 0.3s, color 0.3s', // Geçiş efekti
   };
 
   return (
@@ -31,11 +40,16 @@ export default function SearchBox() {
           overlay={<Tooltip id="tooltip-search">Ara</Tooltip>}
         >
           <Button
-            variant="primary"
             type="submit"
             id="button-search"
             className="rounded-pill"
-            style={{ marginLeft: '-1px' }}
+            style={{ 
+              ...buttonStyle, 
+              marginLeft: '-1px', 
+              border: '1px solid', // Border özelliğini inline stile ekleyin
+            }}
+            onMouseEnter={() => setIsHovered(true)} // Hover başladığında
+            onMouseLeave={() => setIsHovered(false)} // Hover bittiğinde
           >
             <FaSearch />
           </Button>

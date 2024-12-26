@@ -60,13 +60,15 @@ main {
 /* sidebar */
 .navbar-brand {
   font-weight: bold;
+  font-size: x-large;
+  font-style: italic;
 }
 .side-navbar {
   width: 240px;
   height: 100%;
   position: absolute;
   left: -300px;
-  background-color: #100901;
+  background-color: #403e40;
   transition: 0.5s;
 }
 
@@ -81,6 +83,8 @@ main {
 }
 .text-bold {
   font-weight: bold;
+  font-size: larger;
+  font-family: 'Times New Roman', Times, serif;
 }
 
 /* Map */

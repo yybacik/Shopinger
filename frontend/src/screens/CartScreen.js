@@ -40,7 +40,7 @@ export default function CartScreen() {
   };
 
   const applyCouponHandler = () => {
-    if (coupon === 'DISCOUNT10') {
+    if (coupon === 'SHOPİNGER3') {
       const discountedTotal = cartItems.reduce((total, item) => {
         return total + item.price * item.quantity;
       }, 0) * 0.9;
