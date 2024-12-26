@@ -54,14 +54,14 @@ export default function CartScreen() {
   return (
     <div>
       <Helmet>
-        <title>Shopping Cart</title>
+        <title>Sepetim</title>
       </Helmet>
-      <h1>Shopping Cart</h1>
+      <h1>Sepetim</h1>
       <Row>
         <Col md={8}>
           {cartItems.length === 0 ? (
             <MessageBox>
-              Cart is empty. <Link to="/">Go Shopping</Link>
+              Sepetin boş 🥺 <Link to="/">Alışverişe devam et</Link>
             </MessageBox>
           ) : (
             <ListGroup>
@@ -118,14 +118,14 @@ export default function CartScreen() {
               <ListGroup variant="flush">
                 <ListGroup.Item>
                   <h3>
-                    Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}{' '}
-                    items) : $
+                    Toplam Tutar ({cartItems.reduce((a, c) => a + c.quantity, 0)}{' '}
+                    ürün) : $
                     {cartItems.reduce((a, c) => a + c.price * c.quantity, 0)}
                   </h3>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   <div className="mb-3">
-                    <label htmlFor="coupon" className="form-label">Enter Coupon:</label>
+                    <label htmlFor="coupon" className="form-label">Kupon kodu:</label>
                     <input
                       type="text"
                       className="form-control"
@@ -141,7 +141,7 @@ export default function CartScreen() {
                       onClick={applyCouponHandler}
                       disabled={cartItems.length === 0}
                     >
-                      Apply Coupon
+                      Kupon Kodu Kullan
                     </Button>
                   </div>
                 </ListGroup.Item>
@@ -153,7 +153,7 @@ export default function CartScreen() {
                       onClick={checkoutHandler}
                       disabled={cartItems.length === 0}
                     >
-                      Proceed to Checkout
+                      Ödeme Kısmına Geç
                     </Button>
                   </div>
                 </ListGroup.Item>

@@ -97,7 +97,7 @@ export default function ProfileScreen() {
   return (
     <div className="container mt-5">
       <Helmet>
-        <title>User Profile</title>
+        <title>Kullanıcı</title>
       </Helmet>
       <Row className="justify-content-center">
         <Col xs={12} md={8} lg={6}>

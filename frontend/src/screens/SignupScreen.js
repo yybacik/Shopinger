@@ -1,13 +1,10 @@
 import Axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import { Helmet } from 'react-helmet-async';
-import { useContext, useEffect, useState } from 'react';
-import { Store } from '../Store';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
+import { Store } from '../Store';
 
 export default function SignupScreen() {
   const navigate = useNavigate();
@@ -22,10 +19,11 @@ export default function SignupScreen() {
 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { userInfo } = state;
+
   const submitHandler = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
+      toast.error('Şifreler eşleşmiyor');
       return;
     }
     try {
@@ -49,49 +47,124 @@ export default function SignupScreen() {
   }, [navigate, redirect, userInfo]);
 
   return (
-    <Container className="small-container">
+    <div style={{ maxWidth: '400px', margin: '2rem auto', padding: '1rem', border: '1px solid #ccc', borderRadius: '5px' }}>
       <Helmet>
-        <title>Sign Up</title>
+        <title>Kayıt Ol</title>
       </Helmet>
-      <h1 className="my-3">Sign Up</h1>
-      <Form onSubmit={submitHandler}>
-        <Form.Group className="mb-3" controlId="name">
-          <Form.Label>Name</Form.Label>
-          <Form.Control onChange={(e) => setName(e.target.value)} required />
-        </Form.Group>
+      <h1 style={{ textAlign: 'center', marginBottom: '1.5rem' }}>Kayıt Ol</h1>
+      <form onSubmit={submitHandler} style={{ display: 'flex', flexDirection: 'column' }}>
+        {/* İsim Alanı */}
+        <div style={{ marginBottom: '1rem' }}>
+          <label htmlFor="name" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+            İsim
+          </label>
+          <input
+            type="text"
+            id="name"
+            required
+            onChange={(e) => setName(e.target.value)}
+            placeholder="İsminizi giriniz"
+            style={{
+              width: '100%',
+              padding: '0.5rem',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              boxSizing: 'border-box',
+            }}
+          />
+        </div>
 
-        <Form.Group className="mb-3" controlId="email">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
+        {/* E-posta Alanı */}
+        <div style={{ marginBottom: '1rem' }}>
+          <label htmlFor="email" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+            E-posta
+          </label>
+          <input
             type="email"
+            id="email"
             required
             onChange={(e) => setEmail(e.target.value)}
+            placeholder="E-posta adresinizi giriniz"
+            style={{
+              width: '100%',
+              padding: '0.5rem',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              boxSizing: 'border-box',
+            }}
           />
-        </Form.Group>
-        <Form.Group className="mb-3" controlId="password">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
+        </div>
+
+        {/* Şifre Alanı */}
+        <div style={{ marginBottom: '1rem' }}>
+          <label htmlFor="password" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+            Şifre
+          </label>
+          <input
             type="password"
+            id="password"
             required
             onChange={(e) => setPassword(e.target.value)}
+            placeholder="Şifrenizi giriniz"
+            style={{
+              width: '100%',
+              padding: '0.5rem',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              boxSizing: 'border-box',
+            }}
           />
-          <Form.Group className="mb-3" controlId="confirmPassword">
-            <Form.Label>Confirm Password</Form.Label>
-            <Form.Control
-              type="password"
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-          </Form.Group>
-        </Form.Group>
-        <div className="mb-3">
-          <Button type="submit">Sign Up</Button>
         </div>
-        <div className="mb-3">
-          Already have an account?{' '}
-          <Link to={`/signin?redirect=${redirect}`}>Sign-In</Link>
+
+        {/* Şifre Doğrulama Alanı */}
+        <div style={{ marginBottom: '1rem' }}>
+          <label htmlFor="confirmPassword" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+            Şifreyi Doğrula
+          </label>
+          <input
+            type="password"
+            id="confirmPassword"
+            required
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="Şifrenizi tekrar giriniz"
+            style={{
+              width: '100%',
+              padding: '0.5rem',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              boxSizing: 'border-box',
+            }}
+          />
         </div>
-      </Form>
-    </Container>
+
+        {/* Kayıt Ol Butonu */}
+        <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+          <button
+            type="submit"
+            style={{
+              padding: '0.75rem 1.5rem',
+              backgroundColor: '#007bff',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              fontSize: '1rem',
+            }}
+          >
+            Kayıt Ol
+          </button>
+        </div>
+
+        {/* Giriş Yap Linki */}
+        <div style={{ textAlign: 'center' }}>
+          <p>
+            Hesabınız var mı?{' '}
+            <Link to={`/signin?redirect=${redirect}`} style={{ color: '#007bff', textDecoration: 'none' }}>
+              Giriş Yapın
+            </Link>
+          </p>
+        </div>
+      </form>
+    </div>
   );
 }

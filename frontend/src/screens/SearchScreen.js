@@ -12,6 +12,10 @@ import MessageBox from '../components/MessageBox';
 import Button from 'react-bootstrap/Button';
 import Product from '../components/Product';
 import LinkContainer from 'react-router-bootstrap/LinkContainer';
+import Accordion from 'react-bootstrap/Accordion';
+import Card from 'react-bootstrap/Card';
+import Pagination from 'react-bootstrap/Pagination';
+import Form from 'react-bootstrap/Form';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -54,17 +58,14 @@ export const ratings = [
     name: '4stars & up',
     rating: 4,
   },
-
   {
     name: '3stars & up',
     rating: 3,
   },
-
   {
     name: '2stars & up',
     rating: 2,
   },
-
   {
     name: '1stars & up',
     rating: 1,
@@ -80,7 +81,7 @@ export default function SearchScreen() {
   const price = sp.get('price') || 'all';
   const rating = sp.get('rating') || 'all';
   const order = sp.get('order') || 'newest';
-  const page = sp.get('page') || 1;
+  const page = Number(sp.get('page') || 1);
 
   const [{ loading, error, products, pages, countProducts }, dispatch] =
     useReducer(reducer, {
@@ -90,6 +91,7 @@ export default function SearchScreen() {
 
   useEffect(() => {
     const fetchData = async () => {
+      dispatch({ type: 'FETCH_REQUEST' });
       try {
         const { data } = await axios.get(
           `/api/products/search?page=${page}&query=${query}&category=${category}&price=${price}&rating=${rating}&order=${order}`
@@ -98,12 +100,12 @@ export default function SearchScreen() {
       } catch (err) {
         dispatch({
           type: 'FETCH_FAIL',
-          payload: getError(error),
+          payload: getError(err),
         });
       }
     };
     fetchData();
-  }, [category, error, order, page, price, query, rating]);
+  }, [category, order, page, price, query, rating]);
 
   const [categories, setCategories] = useState([]);
   useEffect(() => {
@@ -116,9 +118,9 @@ export default function SearchScreen() {
       }
     };
     fetchCategories();
-  }, [dispatch]);
+  }, []);
 
-  const getFilterUrl = (filter, skipPathname) => {
+  const getFilterUrl = (filter, skipPathname = false) => {
     const filterPage = filter.page || page;
     const filterCategory = filter.category || category;
     const filterQuery = filter.query || query;
@@ -129,6 +131,7 @@ export default function SearchScreen() {
       skipPathname ? '' : '/search?'
     }category=${filterCategory}&query=${filterQuery}&price=${filterPrice}&rating=${filterRating}&order=${sortOrder}&page=${filterPage}`;
   };
+
   return (
     <div>
       <Helmet>
@@ -136,150 +139,189 @@ export default function SearchScreen() {
       </Helmet>
       <Row>
         <Col md={3}>
-          <h3>Department</h3>
-          <div>
-            <ul>
-              <li>
-                <Link
-                  className={'all' === category ? 'text-bold' : ''}
-                  to={getFilterUrl({ category: 'all' })}
-                >
-                  Any
-                </Link>
-              </li>
-              {categories.map((c) => (
-                <li key={c}>
-                  <Link
-                    className={c === category ? 'text-bold' : ''}
-                    to={getFilterUrl({ category: c })}
-                  >
-                    {c}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h3>Price</h3>
-            <ul>
-              <li>
-                <Link
-                  className={'all' === price ? 'text-bold' : ''}
-                  to={getFilterUrl({ price: 'all' })}
-                >
-                  Any
-                </Link>
-              </li>
-              {prices.map((p) => (
-                <li key={p.value}>
-                  <Link
-                    to={getFilterUrl({ price: p.value })}
-                    className={p.value === price ? 'text-bold' : ''}
-                  >
-                    {p.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h3>Avg. Customer Review</h3>
-            <ul>
-              {ratings.map((r) => (
-                <li key={r.name}>
-                  <Link
-                    to={getFilterUrl({ rating: r.rating })}
-                    className={`${r.rating}` === `${rating}` ? 'text-bold' : ''}
-                  >
-                    <Rating caption={' & up'} rating={r.rating}></Rating>
-                  </Link>
-                </li>
-              ))}
-              <li>
-                <Link
-                  to={getFilterUrl({ rating: 'all' })}
-                  className={rating === 'all' ? 'text-bold' : ''}
-                >
-                  <Rating caption={' & up'} rating={0}></Rating>
-                </Link>
-              </li>
-            </ul>
-          </div>
+          <h3 className="mb-3">Filtreleme</h3>
+          <Accordion defaultActiveKey="0">
+            {/* Kategori Filtreleri */}
+            <Accordion.Item eventKey="0">
+              <Accordion.Header>Kategori</Accordion.Header>
+              <Accordion.Body>
+                <ul className="list-unstyled">
+                  <li>
+                    <Link
+                      className={category === 'all' ? 'fw-bold' : ''}
+                      to={getFilterUrl({ category: 'all' })}
+                    >
+                      Herhangi
+                    </Link>
+                  </li>
+                  {categories.map((c) => (
+                    <li key={c}>
+                      <Link
+                        className={c === category ? 'fw-bold' : ''}
+                        to={getFilterUrl({ category: c })}
+                      >
+                        {c}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </Accordion.Body>
+            </Accordion.Item>
+
+            {/* Fiyat Filtreleri */}
+            <Accordion.Item eventKey="1">
+              <Accordion.Header>Fiyat</Accordion.Header>
+              <Accordion.Body>
+                <ul className="list-unstyled">
+                  <li>
+                    <Link
+                      className={price === 'all' ? 'fw-bold' : ''}
+                      to={getFilterUrl({ price: 'all' })}
+                    >
+                      Herhangi
+                    </Link>
+                  </li>
+                  {prices.map((p) => (
+                    <li key={p.value}>
+                      <Link
+                        to={getFilterUrl({ price: p.value })}
+                        className={p.value === price ? 'fw-bold' : ''}
+                      >
+                        {p.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </Accordion.Body>
+            </Accordion.Item>
+
+            {/* Değerlendirme Filtreleri */}
+            <Accordion.Item eventKey="2">
+              <Accordion.Header>Değerlendirme</Accordion.Header>
+              <Accordion.Body>
+                <ul className="list-unstyled">
+                  {ratings.map((r) => (
+                    <li key={r.name}>
+                      <Link
+                        to={getFilterUrl({ rating: r.rating })}
+                        className={`${r.rating}` === `${rating}` ? 'fw-bold' : ''}
+                      >
+                        <Rating caption=" ve üstü" rating={r.rating}></Rating>
+                      </Link>
+                    </li>
+                  ))}
+                  <li>
+                    <Link
+                      to={getFilterUrl({ rating: 'all' })}
+                      className={rating === 'all' ? 'fw-bold' : ''}
+                    >
+                      <Rating caption=" ve üstü" rating={0}></Rating>
+                    </Link>
+                  </li>
+                </ul>
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
         </Col>
         <Col md={9}>
           {loading ? (
-            <LoadingBox></LoadingBox>
+            <LoadingBox />
           ) : error ? (
             <MessageBox variant="danger">{error}</MessageBox>
           ) : (
             <>
-              <Row className="justify-content-between mb-3">
+              {/* Başlık ve Sıralama */}
+              <Row className="align-items-center mb-4">
                 <Col md={6}>
                   <div>
-                    {countProducts === 0 ? 'No' : countProducts} Results
-                    {query !== 'all' && ' : ' + query}
-                    {category !== 'all' && ' : ' + category}
-                    {price !== 'all' && ' : Price ' + price}
-                    {rating !== 'all' && ' : Rating ' + rating + ' & up'}
-                    {query !== 'all' ||
-                    category !== 'all' ||
-                    rating !== 'all' ||
-                    price !== 'all' ? (
+                    {countProducts === 0 ? 'Hiçbir' : countProducts} Sonuç
+                    {query !== 'all' && ` : ${query}`}
+                    {category !== 'all' && ` : ${category}`}
+                    {price !== 'all' && ` : Fiyat ${price}`}
+                    {rating !== 'all' && ` : Değerlendirme ${rating} ve üstü`}
+                    {(query !== 'all' ||
+                      category !== 'all' ||
+                      rating !== 'all' ||
+                      price !== 'all') && (
                       <Button
                         variant="light"
+                        className="ms-2"
                         onClick={() => navigate('/search')}
                       >
-                        <i className="fas fa-times-circle"></i>
+                        <i className="fas fa-times-circle"></i> Temizle
                       </Button>
-                    ) : null}
+                    )}
                   </div>
                 </Col>
-                <Col className="text-end">
-                  Sort by{' '}
-                  <select
+                <Col md={6} className="text-md-end mt-3 mt-md-0">
+                  <Form.Select
                     value={order}
                     onChange={(e) => {
                       navigate(getFilterUrl({ order: e.target.value }));
                     }}
+                    style={{ width: '200px', display: 'inline-block' }}
                   >
-                    <option value="newest">Newest Arrivals</option>
-                    <option value="lowest">Price: Low to High</option>
-                    <option value="highest">Price: High to Low</option>
-                    <option value="toprated">Avg. Customer Reviews</option>
-                  </select>
+                    <option value="newest">En Yeni</option>
+                    <option value="lowest">Fiyat: Düşükten Yükseğe</option>
+                    <option value="highest">Fiyat: Yüksekten Düşüğe</option>
+                    <option value="toprated">Müşteri Yorumları</option>
+                  </Form.Select>
                 </Col>
               </Row>
-              {products.length === 0 && (
-                <MessageBox>No Product Found</MessageBox>
-              )}
+
+              {/* Ürünler */}
+              {products.length === 0 && <MessageBox>Ürün Bulunamadı</MessageBox>}
 
               <Row>
                 {products.map((product) => (
-                  <Col sm={6} lg={4} className="mb-3" key={product._id}>
-                    <Product product={product}></Product>
+                  <Col sm={6} lg={4} className="mb-4" key={product._id}>
+                    <Card className="h-100 shadow-sm">
+                      <Link to={`/product/${product._id}`}>
+                        <Card.Img
+                          variant="top"
+                          src={product.image}
+                          alt={product.name}
+                          style={{ objectFit: 'cover', height: '200px' }}
+                        />
+                      </Link>
+                      <Card.Body className="d-flex flex-column">
+                        <Card.Title as="div">
+                          <Link to={`/product/${product._id}`} className="text-decoration-none text-dark">
+                            <strong>{product.name}</strong>
+                          </Link>
+                        </Card.Title>
+                        <Card.Text as="div" className="mt-auto">
+                          <div className="mb-2">
+                            <Rating rating={product.rating} caption={`(${product.numReviews})`} />
+                          </div>
+                          <h5 className="text-primary">${product.price.toFixed(2)}</h5>
+                        </Card.Text>
+                      </Card.Body>
+                    </Card>
                   </Col>
                 ))}
               </Row>
 
-              <div>
-                {[...Array(pages).keys()].map((x) => (
-                  <LinkContainer
-                    key={x + 1}
-                    className="mx-1"
-                    to={{
-                      pathname: '/search',
-                      seacrh: getFilterUrl({ page: x + 1 }, true),
-                    }}
-                  >
-                    <Button
-                      className={Number(page) === x + 1 ? 'text-bold' : ''}
-                      variant="light"
-                    >
-                      {x + 1}
-                    </Button>
-                  </LinkContainer>
-                ))}
-              </div>
+              {/* Sayfalama */}
+              {pages > 1 && (
+                <div className="d-flex justify-content-center my-4">
+                  <Pagination>
+                    {[...Array(pages).keys()].map((x) => (
+                      <LinkContainer
+                        key={x + 1}
+                        to={{
+                          pathname: '/search',
+                          search: getFilterUrl({ page: x + 1 }, true),
+                        }}
+                      >
+                        <Pagination.Item active={Number(page) === x + 1}>
+                          {x + 1}
+                        </Pagination.Item>
+                      </LinkContainer>
+                    ))}
+                  </Pagination>
+                </div>
+              )}
             </>
           )}
         </Col>

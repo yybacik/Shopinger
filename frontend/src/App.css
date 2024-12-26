@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+/* App.css veya ilgili CSS dosyanıza ekleyin */
+.list-group-item:hover {
+  background-color: #ff4d4d; /* Örneğin, kırmızı tonları */
+  cursor: pointer;
+}

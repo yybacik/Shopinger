@@ -52,10 +52,10 @@ export default function OrderHistoryScreen() {
   return (
     <div>
       <Helmet>
-        <title>Order History</title>
+        <title>Siparişlerim</title>
       </Helmet>
 
-      <h1>Order History</h1>
+      <h1>Siparişlerim</h1>
       {loading ? (
         <LoadingBox></LoadingBox>
       ) : error ? (
@@ -64,12 +64,12 @@ export default function OrderHistoryScreen() {
         <table className="table">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>DATE</th>
-              <th>TOTAL</th>
-              <th>PAID</th>
-              <th>DELIVERED</th>
-              <th>ACTIONS</th>
+              <th>NUMARA</th>
+              <th>TARİH</th>
+              <th>TUTAR</th>
+              <th>ÖDEME</th>
+              <th>SİPARİŞ</th>
+              <th>HAREKET</th>
             </tr>
           </thead>
           <tbody>

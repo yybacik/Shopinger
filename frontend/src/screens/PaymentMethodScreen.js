@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import CheckoutSteps from '../components/CheckoutSteps';
 import { Store } from '../Store';
 
@@ -13,7 +11,7 @@ export default function PaymentMethodScreen() {
     cart: { shippingAddress, paymentMethod },
   } = state;
 
-  const [paymentMethodName, setPaymentMethod] = useState(
+  const [paymentMethodName, setPaymentMethodName] = useState(
     paymentMethod || 'PayPal'
   );
 
@@ -22,45 +20,63 @@ export default function PaymentMethodScreen() {
       navigate('/shipping');
     }
   }, [shippingAddress, navigate]);
+
   const submitHandler = (e) => {
     e.preventDefault();
     ctxDispatch({ type: 'SAVE_PAYMENT_METHOD', payload: paymentMethodName });
     localStorage.setItem('paymentMethod', paymentMethodName);
     navigate('/placeorder');
   };
+
   return (
     <div>
+      <Helmet>
+        <title>Ödeme Yöntemi</title>
+      </Helmet>
+
       <CheckoutSteps step1 step2 step3></CheckoutSteps>
-      <div className="container small-container">
-        <Helmet>
-          <title>Payment Method</title>
-        </Helmet>
-        <h1 className="my-3">Payment Method</h1>
-        <Form onSubmit={submitHandler}>
-          <div className="mb-3">
-            <Form.Check
+      <div style={{ maxWidth: '600px', margin: '0 auto', padding: '1rem' }}>
+        <h1>Ödeme Yöntemi</h1>
+        <form onSubmit={submitHandler}>
+          <div style={{ marginBottom: '1rem' }}>
+            <input
               type="radio"
               id="PayPal"
-              label="PayPal"
+              name="paymentMethod"
               value="PayPal"
               checked={paymentMethodName === 'PayPal'}
-              onChange={(e) => setPaymentMethod(e.target.value)}
+              onChange={(e) => setPaymentMethodName(e.target.value)}
+              style={{ marginRight: '0.5rem' }}
             />
+            <label htmlFor="PayPal">PayPal</label>
           </div>
-          <div className="mb-3">
-            <Form.Check
+          <div style={{ marginBottom: '1rem' }}>
+            <input
               type="radio"
               id="Stripe"
-              label="Stripe"
+              name="paymentMethod"
               value="Stripe"
               checked={paymentMethodName === 'Stripe'}
-              onChange={(e) => setPaymentMethod(e.target.value)}
+              onChange={(e) => setPaymentMethodName(e.target.value)}
+              style={{ marginRight: '0.5rem' }}
             />
+            <label htmlFor="Stripe">Stripe</label>
           </div>
-          <div className="mb-3">
-            <Button type="submit">Continue</Button>
+          <div>
+            <button
+              type="submit"
+              style={{
+                padding: '0.5rem 1rem',
+                backgroundColor: '#007bff',
+                color: '#fff',
+                border: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              Devam Et
+            </button>
           </div>
-        </Form>
+        </form>
       </div>
     </div>
   );

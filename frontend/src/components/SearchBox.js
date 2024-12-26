@@ -30,8 +30,8 @@ export default function SearchBox() {
           name="q"
           id="q"
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search for product..."
-          aria-label="Search for product"
+          placeholder="Ürünleri bul..."
+          aria-label="Ürünleri bul"
           aria-describedby="button-search"
           className="border-end-0 rounded-pill"
         />

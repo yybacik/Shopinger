@@ -2,11 +2,6 @@ import Axios from 'axios';
 import React, { useContext, useEffect, useReducer } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate } from 'react-router-dom';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import ListGroup from 'react-bootstrap/ListGroup';
 import { toast } from 'react-toastify';
 import { getError } from '../utils';
 import { Store } from '../Store';
@@ -83,113 +78,98 @@ export default function PlaceOrderScreen() {
 
   return (
     <div>
-      <CheckoutSteps step1 step2 step3 step4></CheckoutSteps>
       <Helmet>
-        <title>Preview Order</title>
+        <title>Siparişi Önizle</title>
       </Helmet>
-      <h1 className="my-3">Preview Order</h1>
-      <Row>
-        <Col md={8}>
-          <Card className="mb-3">
-            <Card.Body>
-              <Card.Title>Shipping</Card.Title>
-              <Card.Text>
-                <strong>Name:</strong> {cart.shippingAddress.fullName} <br />
-                <strong>Address: </strong> {cart.shippingAddress.address},
-                {cart.shippingAddress.city}, {cart.shippingAddress.postalCode},
-                {cart.shippingAddress.country}
-              </Card.Text>
-              <Link to="/shipping">Edit</Link>
-            </Card.Body>
-          </Card>
 
-          <Card className="mb-3">
-            <Card.Body>
-              <Card.Title>Payment</Card.Title>
-              <Card.Text>
-                <strong>Method:</strong> {cart.paymentMethod}
-              </Card.Text>
-              <Link to="/payment">Edit</Link>
-            </Card.Body>
-          </Card>
+      <CheckoutSteps step1 step2 step3 step4></CheckoutSteps>
+      <h1 style={{ textAlign: 'center', margin: '1rem 0' }}>Siparişi Önizle</h1>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', padding: '1rem' }}>
+        {/* Sol Bölüm */}
+        <div style={{ flex: '2', minWidth: '300px' }}>
+          {/* Gönderim Bilgileri */}
+          <div style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '1rem', marginBottom: '1rem' }}>
+            <h2>Gönderim</h2>
+            <p>
+              <strong>Ad Soyad:</strong> {cart.shippingAddress.fullName} <br />
+              <strong>Adres:</strong> {cart.shippingAddress.address}, {cart.shippingAddress.city}, {cart.shippingAddress.postalCode}, {cart.shippingAddress.country}
+            </p>
+            <Link to="/shipping" style={{ color: '#007bff', textDecoration: 'none' }}>Düzenle</Link>
+          </div>
 
-          <Card className="mb-3">
-            <Card.Body>
-              <Card.Title>Items</Card.Title>
-              <ListGroup variant="flush">
-                {cart.cartItems.map((item) => (
-                  <ListGroup.Item key={item._id}>
-                    <Row className="align-items-center">
-                      <Col md={6}>
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="img-fluid rounded img-thumbnail"
-                        ></img>{' '}
-                        <Link to={`/product/${item.slug}`}>{item.name}</Link>
-                      </Col>
-                      <Col md={3}>
-                        <span>{item.quantity}</span>
-                      </Col>
-                      <Col md={3}>${item.price}</Col>
-                    </Row>
-                  </ListGroup.Item>
-                ))}
-              </ListGroup>
-              <Link to="/cart">Edit</Link>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={4}>
-          <Card>
-            <Card.Body>
-              <Card.Title>Order Summary</Card.Title>
-              <ListGroup variant="flush">
-                <ListGroup.Item>
-                  <Row>
-                    <Col>Items</Col>
-                    <Col>${cart.itemsPrice.toFixed(2)}</Col>
-                  </Row>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Row>
-                    <Col>Shipping</Col>
-                    <Col>${cart.shippingPrice.toFixed(2)}</Col>
-                  </Row>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Row>
-                    <Col>Tax</Col>
-                    <Col>${cart.taxPrice.toFixed(2)}</Col>
-                  </Row>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <Row>
-                    <Col>
-                      <strong> Order Total</strong>
-                    </Col>
-                    <Col>
-                      <strong>${cart.totalPrice.toFixed(2)}</strong>
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
-                <ListGroup.Item>
-                  <div className="d-grid">
-                    <Button
-                      type="button"
-                      onClick={placeOrderHandler}
-                      disabled={cart.cartItems.length === 0}
-                    >
-                      Place Order
-                    </Button>
-                  </div>
-                  {loading && <LoadingBox></LoadingBox>}
-                </ListGroup.Item>
-              </ListGroup>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+          {/* Ödeme Bilgileri */}
+          <div style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '1rem', marginBottom: '1rem' }}>
+            <h2>Ödeme</h2>
+            <p>
+              <strong>Yöntem:</strong> {cart.paymentMethod}
+            </p>
+            <Link to="/payment" style={{ color: '#007bff', textDecoration: 'none' }}>Düzenle</Link>
+          </div>
+
+          {/* Ürünler */}
+          <div style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '1rem', marginBottom: '1rem' }}>
+            <h2>Ürünler</h2>
+            {cart.cartItems.map((item) => (
+              <div key={item._id} style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '5px', marginRight: '1rem' }}
+                />
+                <div style={{ flex: '1' }}>
+                  <Link to={`/product/${item.slug}`} style={{ color: '#007bff', textDecoration: 'none' }}>
+                    {item.name}
+                  </Link>
+                </div>
+                <div style={{ width: '50px', textAlign: 'center' }}>x{item.quantity}</div>
+                <div style={{ width: '70px', textAlign: 'right' }}>${item.price.toFixed(2)}</div>
+              </div>
+            ))}
+            <Link to="/cart" style={{ color: '#007bff', textDecoration: 'none' }}>Düzenle</Link>
+          </div>
+        </div>
+
+        {/* Sağ Bölüm - Sipariş Özeti */}
+        <div style={{ flex: '1', minWidth: '300px' }}>
+          <div style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '1rem' }}>
+            <h2>Sipariş Özeti</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+              <div>Ürünler</div>
+              <div>${cart.itemsPrice.toFixed(2)}</div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+              <div>Gönderim</div>
+              <div>${cart.shippingPrice.toFixed(2)}</div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+              <div>Vergi</div>
+              <div>${cart.taxPrice.toFixed(2)}</div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', fontWeight: 'bold' }}>
+              <div>Sipariş Toplamı</div>
+              <div>${cart.totalPrice.toFixed(2)}</div>
+            </div>
+            <button
+              type="button"
+              onClick={placeOrderHandler}
+              disabled={cart.cartItems.length === 0}
+              style={{
+                width: '100%',
+                padding: '0.75rem',
+                backgroundColor: '#007bff',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                fontSize: '1rem',
+              }}
+            >
+              Siparişi Tamamla
+            </button>
+            {loading && <LoadingBox />}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

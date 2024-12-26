@@ -47,7 +47,10 @@ function HomeScreen() {
       <Helmet>
         <title>Shopinger</title>
       </Helmet>
-      <h1>Our Products</h1>
+      <h1 style={{ fontFamily: 'Arial', fontSize: '3em', color: '#333' }}>
+  Sizin İçin Seçtiklerimiz 💫
+</h1>
+
       <div className="products">
         {loading ? (
           <LoadingBox />

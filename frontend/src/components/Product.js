@@ -92,7 +92,7 @@ function Product(props) {
             onClick={() => addToCartHandler(product)}
             disabled={product.countInStock === 0}
           >
-            <i className="fas fa-cart-plus me-2"></i> Add to Cart
+            <i className="fas fa-cart-plus me-2"></i>Sepete Ekle
           </Button>
           <div>
             <OverlayTrigger
